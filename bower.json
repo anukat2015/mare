@@ -1,12 +1,17 @@
 {
-  "name": "app",
+  "name": "mare",
   "version": "0.0.0",
   "dependencies": {
-    "angular": "~0.0.0",
-    "jquery": "~0.0.0",
-    "angular-ui-router": "~0.0.0",
-    "angular-http-auth": "~0.0.0",
-    "bootstrap": "~0.0.0"
+    "jquery": "~2.2.0",
+    "angular": "~1.4.8",
+    "angular-ui-router": "~0.2.15",
+    "angular-http-auth": "~1.2.3",
+    "bootstrap": "~3.3.6",
+    "js-xlsx": "~0.8.0",
+    "papaparse": "papa.parse#~4.1.2",
+    "ng-file-upload": "~11.1.1",
+    "angular-bootstrap": "~1.0.3",
+    "FileSaver": "*"
   },
   "overrides": {
     "bootstrap": {
@@ -18,7 +23,12 @@
         "dist/fonts/glyphicons-halflings-regular.svg",
         "dist/fonts/glyphicons-halflings-regular.ttf",
         "dist/fonts/glyphicons-halflings-regular.woff",
-	"dist/fonts/glyphicons-halflings-regular.woff2"
+        "dist/fonts/glyphicons-halflings-regular.woff2"
+      ]
+    },
+    "js-xlsx": {
+      "main": [
+        "dist/xlsx.full.min.js"
       ]
     }
   },

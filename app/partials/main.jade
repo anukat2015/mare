@@ -1,0 +1,49 @@
+script(type="text/ng-template",id="selectSheet")
+  .modal-header
+    h3.modal-title Preview
+  .modal-body
+    uib-tabset
+      uib-tab(ng-repeat="sheet in sheets",heading="{{sheet.name}}",active="sheet.active")
+        div(style="overflow:scroll;max-height:500px"): table.table.table-bordered.table-striped
+          tr 
+            th(ng-if="firstRowIsHeader",ng-repeat="header in sheet.data[0] track by $index") {{header}}
+            th(ng-if="!firstRowIsHeader",ng-repeat="header in sheet.data[0] track by $index") Column {{$index + 1}}
+          tr(ng-repeat="row in sheet.data | limitTo:10:(skipRows+(firstRowIsHeader ? 1 : 0)) track by $index"): td(ng-repeat="column in row track by $index") {{column}}
+  .modal-footer
+    .checkbox
+      label
+        input(type="checkbox",ng-model="firstRowIsHeader")
+        | Use first row as header
+    input(type="number",ng-model="$parent.skipRows",placeholder="skip rows")
+    button.btn.btn-success(ng-click="$close();loadSheet()") Load
+button.btn.btn-success(ngf-select,ngf-change="loadFile($files[0])",ngf-multiple="false") Load File
+table.table.table-striped.table-bordered(ng-show="originalData")
+  tr
+    th.form-inline.form-group(ng-repeat="heading in output.headings track by $index")
+      input.form-control(type="text",ng-model="output.headings[$index].label")
+      button.btn.btn-sm.btn-danger(ng-if="$index!=0",ng-click="deleteOutputMapping($index)") X
+    th: button.btn.btn-sm.btn-success(ng-click="addHeading()") +
+  tr(ng-repeat="(key,value) in output.mappings")
+    th {{originalHeadings[key]}}
+      button.btn.btn-sm.btn-danger(ng-click="deleteOutputColumn(key)") X
+    th(ng-repeat="heading in output.headings|limitTo:output.headings.length:1 track by $index")
+      div(ng-repeat="value in output.mappings[key][$index+1] track by $index") {{originalHeadings[value]}}
+        button.btn.btn-sm.btn-danger(ng-click="deleteMapping(key,$parent.$index+1,$index)") X
+      select.form-control(ng-options="idx as heading disable when output.mappings[key][$index+1] && output.mappings[key][$index+1].indexOf(idx-0)!=-1 for (idx,heading) in originalHeadings",ng-model="selectedHeading",ng-change="addMapping(key,$index+1,selectedHeading);selectedHeading=undefined")
+        option(value="") -- add new --
+  tr
+    th: select.form-control(ng-options="idx as heading disable when output.mappings[idx] for (idx,heading) in originalHeadings",ng-model="selectedHeading",ng-change="addMappingKey(selectedHeading);selectedHeading=undefined")
+      option(value="") -- add new --
+    th(ng-repeat="heading in output.headings|limitTo:output.headings.length:1 track by $index"): select.form-control(ng-model="output.headings[$index+1].type",ng-change="updateOutput()")
+      option Distinct values
+      option Distinct count
+      option Max number
+      option Min number
+      option Number range
+      option Max date
+      option Min date
+      option Date range
+  tr(ng-repeat="row in output.data|limitTo:10 track by $index")
+    td(ng-repeat="value in row track by $index") {{value}}
+button.btn.btn-success(ng-click="saveCSVFile()",ng-show="output.data") Save as CSV
+      

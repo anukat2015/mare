@@ -28,18 +28,22 @@ html(lang="en",ng-app="app",ng-hint)
           button.btn.btn-danger(ng-click="dismissAuth()") Cancel
     // build:js(app) scripts/vendor.js
     // bower:js
-    script(src='bower_components/angular/angular.js')
     script(src='bower_components/jquery/dist/jquery.js')
+    script(src='bower_components/angular/angular.js')
     script(src='bower_components/angular-ui-router/release/angular-ui-router.js')
     script(src='bower_components/angular-http-auth/src/http-auth-interceptor.js')
     script(src='bower_components/bootstrap/dist/js/bootstrap.js')
+    script(src='bower_components/js-xlsx/dist/xlsx.full.min.js')
+    script(src='bower_components/papaparse/papaparse.js')
+    script(src='bower_components/ng-file-upload/ng-file-upload.js')
+    script(src='bower_components/angular-bootstrap/ui-bootstrap-tpls.js')
+    script(src='bower_components/FileSaver/FileSaver.js')
     // endbower
     // endbuild
 
     // build:js(.tmp) scripts/main.js
     script(src="scripts/app.js")
     script(src="scripts/main-ctrl.js")
-    script(src="scripts/sparql-service.js")
     // inject:partials
     // endinject
     // endbuild
