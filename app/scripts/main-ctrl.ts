@@ -29,6 +29,14 @@ namespace app {
     addMappingKey: (key: string) => void
     deleteMapping: (key: string, column: number, origColumnIndex: number) => void
     updateOutput: () => void
+    selectMappingToLoad: () => void
+    loadMapping: (mapping: Table) => void
+    showSaveMappingDialog: () => void
+    saveMapping: (name: string) => void
+    deleteSavedMapping: (name: string) => void
+    importMapping: (file: File) => void
+    exportMapping: () => void
+    mappings: {[id: string]: Table}
   }
 
   class Table {
@@ -51,7 +59,9 @@ namespace app {
   declare var XLSX: any
 
   export class MainController {
-    constructor(private $scope: IMainScope, $uibModal: angular.ui.bootstrap.IModalService) {
+    constructor(private $scope: IMainScope, $uibModal: angular.ui.bootstrap.IModalService, $localStorage: any) {
+      if (!$localStorage.mappings) $localStorage.mappings = {}
+      $scope.mappings = $localStorage.mappings
       let updateOutput: () => void = $scope.updateOutput = () => {
         $scope.output.data = []
         let idRowMapMap: {[id: number]: {[id: string]: number[]}} = {}
@@ -187,6 +197,50 @@ namespace app {
         $scope.output.headings.push(new Heading())
         updateOutput()
       }
+      $scope.selectMappingToLoad = () => {
+        $uibModal.open({
+          templateUrl: 'selectMapping',
+          scope: $scope
+        })
+      }
+      $scope.loadMapping = (mappings: Table) => {
+        $scope.output.headings = mappings.headings
+        $scope.output.mappings = mappings.mappings
+        updateOutput()
+      }
+      $scope.showSaveMappingDialog = () => {
+        $uibModal.open({
+          templateUrl: 'saveMapping',
+          scope: $scope
+        })
+      }
+      $scope.saveMapping = (name: string) => {
+        $localStorage.mappings[name] = {
+          mappings: $scope.output.mappings,
+          headings: $scope.output.headings
+        }
+      }
+      $scope.deleteSavedMapping = (name: string) => {
+        delete $localStorage.mappings[name]
+      }
+      $scope.importMapping = (file: File) => {
+        if (!file) return
+        let reader: FileReader = new FileReader()
+        reader.onload = () => {
+          let mappings: Table = JSON.parse(reader.result)
+          $scope.output.mappings = mappings.mappings
+          $scope.output.headings = mappings.headings
+          updateOutput()
+          $scope.$digest()
+        }
+        reader.readAsText(file)
+      }
+      $scope.exportMapping = () => {
+        let mappings: Table = new Table()
+        mappings.mappings = $scope.output.mappings
+        mappings.headings = $scope.output.headings
+        saveAs(new Blob([JSON.stringify(mappings)], {type: 'application/json'}), 'mappings.json')
+      }
       $scope.output = new Table()
       let handleError: (error: IError) => void = (error: IError) => $scope.error = error
       let init: (data: string[][]) => void = (data: string[][]) => {
@@ -225,7 +279,7 @@ namespace app {
                 let sheet: Sheet = new Sheet(sn)
                 let sheetJson: {}[] = XLSX.utils.sheet_to_json(workBook.Sheets[sn])
                 sheet.data = [[]]
-                for (let header in sheetJson[0]) if (!header.startsWith('__')) sheet.data[0].push(header)
+                for (let header in sheetJson[0]) if (header.indexOf('__') !== 0) sheet.data[0].push(header)
                 XLSX.utils.sheet_to_json(workBook.Sheets[sn]).forEach(row => {
                   let row2: string[] = []
                   sheet.data[0].forEach(h => row2.push(row[h]))
@@ -254,7 +308,7 @@ namespace app {
       }
       $scope.saveCSVFile = () => {
         let data: string[][] = [$scope.output.headings.map(h => h.label)].concat($scope.output.data)
-        saveAs(new Blob([Papa.unparse(data)], {type: 'text/csv'}), 'mare-' + $scope.fileName)
+        saveAs(new Blob([Papa.unparse(data)], {type: 'text/csv'}), 'mare-' + $scope.fileName + ($scope.fileName.indexOf('.csv', $scope.fileName.length - 4) !== -1 ? '' : '.csv'))
       }
     }
   }

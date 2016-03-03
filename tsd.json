@@ -19,6 +19,9 @@
     },
     "papaparse/papaparse.d.ts": {
       "commit": "70bf7e2bfeb0d5b1b651ef3219bcc65c8eec117e"
+    },
+    "FileSaver/FileSaver.d.ts": {
+      "commit": "ba4c4fc6c9ec3d1b9b7e26437d6e0f4f8337c948"
     }
   }
 }

@@ -5,6 +5,7 @@
     "jquery": "~2.2.0",
     "angular": "~1.4.8",
     "angular-ui-router": "~0.2.15",
+    "ngstorage": "~0.3.10",
     "angular-http-auth": "~1.2.3",
     "bootstrap": "~3.3.6",
     "js-xlsx": "~0.8.0",
