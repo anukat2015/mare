@@ -9,4 +9,7 @@ namespace app {
       controller: 'MainController'
       })
   })
-  }
+  m.config(($localStorageProvider) => {
+    $localStorageProvider.setKeyPrefix('mare-');
+  })
+}
