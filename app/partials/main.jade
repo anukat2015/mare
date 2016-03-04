@@ -42,7 +42,7 @@ div(ng-show="originalData")
       tr: th(ng-repeat="heading in originalHeadings") {{heading}}
       tr(ng-repeat="row in originalData|limitTo:10 track by $index"): td(ng-repeat="value in row track by $index") {{value}}
   h4 Output
-  button.btn.btn-success(ng-click="selectMappingToLoad()") Load mapping
+  button.btn.btn-success(ng-click="selectMappingToLoad()") Select mapping
   button.btn.btn-warning(ngf-select,ngf-change="importMapping($files[0])",ngf-multiple="false") Import mapping
   button.btn.btn-danger(ng-click="editing=!editing") Edit mapping
   button.btn.btn-warning(ng-show="output.data",ng-click="showSaveMappingDialog()") Save mapping
