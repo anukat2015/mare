@@ -77,8 +77,8 @@ namespace app {
             idRowMap[row[id]].push(index)
             idSet[row[id]] = true
           })
-          for (let nid in idSet) $scope.output.data.push([nid])
         }
+        for (let nid in idSet) $scope.output.data.push([nid])
         /* tslint:disable:no-var-keyword */
         for (var i: number = 1; i < $scope.output.headings.length; i++) {
           /* tslint:enable:no-var-keyword */
@@ -162,7 +162,7 @@ namespace app {
                     if (valNum < drmin) drmin = valNum
                   }
                   if (drmax.getTime() !== -8640000000000000 || drmin.getTime() !== 8640000000000000)
-                    valueString = '' + (drmin.getTime() !== 8640000000000000 ? drmin.toISOString().substring(0, 10) : '') + '-' + (drmax.getTime() !== -8640000000000000 ? drmax.toISOString().substring(0, 10) : '')
+                    valueString = '' + (drmin.getTime() !== 8640000000000000 ? drmin.toISOString().substring(0, 10) : '') + ' - ' + (drmax.getTime() !== -8640000000000000 ? drmax.toISOString().substring(0, 10) : '')
                   break
               default: console.log('unknown type: ' + heading.type)
             }
