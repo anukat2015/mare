@@ -252,7 +252,7 @@ namespace app {
       $scope.loadFile = (file: File) => {
         if (!file) return
         $scope.fileName = file.name
-        if (file.type === 'text/csv')
+        if (file.type.indexOf('text/') === 0)
           Papa.parse(file, { complete: (csv): void => {
             if (csv.errors.length !== 0)
               handleError({data: csv.errors.map(e => e.message).join('\n')})
@@ -308,7 +308,8 @@ namespace app {
       }
       $scope.saveCSVFile = () => {
         let data: string[][] = [$scope.output.headings.map(h => h.label)].concat($scope.output.data)
-        saveAs(new Blob([Papa.unparse(data)], {type: 'text/csv'}), 'mare-' + $scope.fileName + ($scope.fileName.indexOf('.csv', $scope.fileName.length - 4) !== -1 ? '' : '.csv'))
+        let fn: string = 'mare-' + $scope.fileName.replace(/\..*?$/, '.csv')
+        saveAs(new Blob([Papa.unparse(data)], {type: 'text/csv'}), fn)
       }
     }
   }
