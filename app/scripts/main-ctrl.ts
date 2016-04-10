@@ -309,7 +309,7 @@ namespace app {
       $scope.saveCSVFile = () => {
         let data: string[][] = [$scope.output.headings.map(h => h.label)].concat($scope.output.data)
         let fn: string = 'mare-' + $scope.fileName.replace(/\..*?$/, '.csv')
-        saveAs(new Blob([Papa.unparse(data)], {type: 'text/csv'}), fn)
+        saveAs(new Blob(['\ufeff' + Papa.unparse(data)], {type: 'text/csv'}), fn)
       }
     }
   }
